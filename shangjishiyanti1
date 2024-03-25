@@ -1,3 +1,5 @@
+实验题1***********************************************************************************************************************************************
+
 #define _CRT_SECURE_NO_WARNINGS
 
 #include<stdio.h>
@@ -22,4 +24,36 @@ int main()
     scanf("%d",&n);
     printf("%d",n*(n+1)/2);
     return 0;
+}
+
+实验题2***************************************************************************************************************************************************
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<math.h>
+
+int main()
+{
+	int n = 0;
+	scanf("%d", &n);
+	int m = n;
+	double t ;
+	t = sqrt(n);//求根号,根号是一个浮点数
+	int k = 1;
+	while (n != 1)//我们求n的阶乘
+	{
+		k *= n;
+		n--;
+	}
+	n = m;
+	int mul=1;
+	while (n != 0)//这里用来表示2的n次方
+	{
+		mul = mul * 2;
+		n--;
+	}
+	n = m;
+	double s = log2(n);//log2(n)的值是一个浮点数，不是整数，不能整数打印
+	printf("%f\t%f\t%d\t%d\t%d\t%d\t%d\t%d\t", s,t,n,n*s,n*n,n*n*n,mul,k);//s是log2(n),t是根号n,
+	return 0;
+
 }
