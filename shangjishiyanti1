@@ -57,3 +57,49 @@ int main()
 	return 0;
 
 }
+
+实验题3****************************************************************************************************************************************************
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<math.h>
+第一种
+
+int main()
+{
+	int n = 0,k=0;
+	scanf("%d", &n);
+	for (int i = 2; i < n; i++)
+	{
+		if (n % i == 0)
+		{
+			k = 1;
+			printf("n是素数");
+			break;
+		}
+	}
+	if (k == 0)
+	{
+		printf("n不是素数");
+	}
+
+第二种
+int main()
+{
+	int n;
+	int k = 0;
+	scanf("%d", &n);
+	for (int i = sqrt(n); i > 1; i--)
+	{
+		if (n % i == 0)
+		{
+			k = 1;
+			printf("n是素数");
+			break;
+		}
+	}
+	if (k == 0)
+	{
+		printf("n不是素数");
+	}
+	return 0;
+}
