@@ -1,0 +1,30 @@
+建立一个顺序表
+#include<stdio.h>
+#include<stdlib.h>
+typedef int ElemType;
+#define MaxSize 50
+typedef struct
+{
+	ElemType data[MaxSize];
+	int length;
+}SqList;
+int main()
+{
+	//下面我要开始顺序表的操作,fine
+	void CreateList(SqList * &L, ElemType a[], int n);
+
+}
+
+void CreateList(SqList*& L, ElemType a[], int n)
+{
+	int i = 0, k = 0;
+	L = (SqList*)malloc(sizeof(SqList));
+	while (i < n)
+	{
+		L->data[k] = a[i];
+		k++;
+		i++;
+	}
+	L->length = k;
+
+}
