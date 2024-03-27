@@ -15,7 +15,7 @@ int main()
 
 }
 
-void CreateList(SqList*& L, ElemType a[], int n)
+void CreateList(SqList*& L, ElemType a[], int n)//创建一个顺序表
 {
 	int i = 0, k = 0;
 	L = (SqList*)malloc(sizeof(SqList));
@@ -27,4 +27,34 @@ void CreateList(SqList*& L, ElemType a[], int n)
 	}
 	L->length = k;
 
+}
+
+void InitList(SqList*& L)//初始化线性表
+{
+	L = (SqList*)malloc(sizeof(SqList));
+	L->length = 0;
+}
+
+void DestoryList(SqList*& L)//销毁线性表
+{
+	free(L);
+}
+
+bool ListEmpty(SqList* L)//判断线性表是否为空表
+{
+	return (L->length == 0);
+}
+
+int ListLength(SqList* L)//求线性表的长度
+{
+	return L->length;
+}
+
+void DisList(SqList* L)//输出线性表
+{
+	for (int i = 0; i < L->length; i++)
+	{
+		printf("%d", L -> data[i]);
+	}
+	printf("\n");
 }
