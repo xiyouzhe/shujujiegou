@@ -107,6 +107,7 @@ bool ListDelete(SqList*& L, int i, ElemType &e)//删除数据元素
 }
 
 //删除顺序表中所有值等于x的元素，要求算法的时间复杂度为O(n),空间复杂度为O(l)
+//整体建表法
 void delnodel(SqList*& L, ElemType x)
 {
 	int k = 0, i;
@@ -119,4 +120,17 @@ void delnodel(SqList*& L, ElemType x)
 		}
 	}
 	L->length = k;
+}
+//元素移动法
+void delonde2(SqList*& L, ElemType x)
+{
+	int k = 0, i = 0;
+	while (i < L->length)
+	{
+		if (L->data[i] == x)
+			k++;
+		else
+			L->data[i - k] = L->data[i];
+		i++;
+	}
 }
