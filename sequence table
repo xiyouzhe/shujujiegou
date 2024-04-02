@@ -151,3 +151,5 @@ void partitionl(SqList*& L)
 	}
 	swap(L->data[0], L->data[i]);
 }
+
+//
