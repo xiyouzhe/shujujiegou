@@ -1,0 +1,53 @@
+求第k大：
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+int a[1000], n, k;
+int part(int ileft, int iright);
+int search(int n, int k);
+int main()
+{
+	cin >> n;
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> a[i];
+	}
+	cin >> k;
+	cout << search(n, k);
+	return 0;
+}
+
+int part(int ileft, int iright) {
+	if (ileft == iright)
+		return ileft;
+	int i = ileft + 1, j = iright,pivot = a[ileft];
+	while (i <= j){
+		while (i <= j && a[i] < pivot)
+		i++;
+	while (i <= j && a[i] > pivot)
+		j--;
+	if (i < j) {
+		swap(a[i], a[j]);
+		i++;
+		j--;
+	}
+		}
+	swap(a[ileft], a[j]);
+	return j;
+}
+
+int search(int n, int k) {
+	random_shuffle(a + 1, a + n + 1);
+	int t = n - k + 1;
+	int ileft = 1, iright = n;
+	int mid;
+	while (ileft <= iright) {
+		mid = part(ileft, iright);
+		if (mid == t) break;
+		else if (t < mid) iright = mid - 1;
+		else ileft = mid + 1;
+
+	}
+	return a[mid];
+}
