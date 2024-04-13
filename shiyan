@@ -51,3 +51,133 @@ int search(int n, int k) {
 	}
 	return a[mid];
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+求两个链表的交集
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<stdio.h>
+#define MAX 100
+
+typedef struct LNode {
+	int data;
+	struct LNode* next;
+}LNode, * LinkList;
+
+int InitList(LinkList& L) {
+	L = new LNode;
+	L->next = NULL;
+	return 1;
+}
+
+void TraveList(LinkList L) {
+	struct LNode* p;
+	p = L->next;
+	while (p) {
+		printf("%d ", p->data);
+		p = p->next;
+	}
+	printf("\n");
+}
+
+int ListLength(LinkList& L) {
+	int length = 0;
+	struct LNode* p;
+	p = L->next;
+	while (p) {
+		++length;
+		p = p->next;
+	}
+	return length;
+}
+
+void CreateList(LinkList& L, int n) {
+	L = new LNode;
+	L->next = NULL;
+	struct LNode* r;
+	r = L;
+	for (int i = 0; i < n; i++) {
+		printf("请输入第%d个元素的值:", i + 1);
+		struct LNode* s;
+		s = new LNode;
+		scanf("%d", &s->data);
+		s->next = NULL;
+		r->next = s;
+		r = s;
+	}
+}
+
+/*
+算法思想：
+假设两个表分别是L1和L2，表的元素递增排列；需要3个指针，pa，pb，pc.
+指针的初始值是pa指向L1的第一个结点，pb指向L2的第一个结点，pc指向新表L3的头结点；
+初始时，L3指向L1的头结点。
+当pa和pb的指向都非空时，比较pa和pb所指向的元素的值，当pa->data<pb->data时，指针pa后移，pb不变；
+当pa->data>pb->data时，pb指针后移，pa不变；
+当pa->data==pb->data时，让指针pc指向pa,之后pa和pb都后移.
+*/
+void Intersection(LinkList& L1, LinkList& L2, LinkList& L3) {
+	struct LNode* pa, * pb, * pc;
+	pa = L1->next;
+	pb = L2->next;
+	L3 = L1;
+	pc = L3;
+	//L3->next=NULL;
+	while (pa && pb) {
+		struct LNode* q;
+		if (pa->data < pb->data) {
+			pa = pa->next;
+		}
+		else if (pa->data > pb->data) {
+			pb = pb->next;
+		}
+		else if (pa->data == pb->data) {
+			pc->next = pa;
+			pc = pa;
+			pa = pa->next;
+			pb = pb->next;
+		}
+	}
+}
+int main() {
+	LinkList L1, L2, L3;
+
+	if (InitList(L1)) {
+		printf("表L1初始化成功!\n");
+	}
+	else {
+		printf("表L1初始化失败!\n");
+	}
+
+	if (InitList(L2)) {
+		printf("表L2初始化成功!\n");
+	}
+	else {
+		printf("表L2初始化失败!\n");
+	}
+
+	if (InitList(L3)) {
+		printf("表L3初始化成功!\n");
+	}
+	else {
+		printf("表L3初始化失败!\n");
+	}
+
+	printf("请输入L1的长度:");
+	int n1;
+	scanf("%d", &n1);
+	CreateList(L1, n1);
+	printf("L1的长度:%d\n", ListLength(L1));
+	TraveList(L1);
+
+	printf("请输入L2的长度:");
+	int n2;
+	scanf("%d", &n2);
+	CreateList(L2, n2);
+	TraveList(L2);
+
+	Intersection(L1, L2, L3);
+	printf("输出交集:\n");
+	TraveList(L1);
+}
