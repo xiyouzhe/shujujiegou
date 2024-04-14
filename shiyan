@@ -53,7 +53,6 @@ int search(int n, int k) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 求两个链表的交集
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -181,3 +180,137 @@ int main() {
 	printf("输出交集:\n");
 	TraveList(L1);
 }
+
+两个多项式相加
+#include<iostream>
+using namespace std;
+
+typedef struct Polynimial
+{
+	double coef;				//系数
+	int exp;					//指数
+	struct Polynimial* next;
+}Polynimial, * PolynimialList;
+
+/*创建一元多项式*/
+void CreatePolynimial(PolynimialList& L)
+{
+	double coef;
+	int exp;
+	L = new Polynimial;		//创建头节点，其next域置为NULL
+	L->next = NULL;
+	Polynimial* p;
+	Polynimial* r = L;		//r始终指向尾结点，初始时指向头结点
+	cout << "请依次输入多项式的系数与指数（输入指数为0表示结束）：" << endl;
+	cin >> coef >> exp;
+	while (coef != 0)			//循环建立数据结点p
+	{
+		p = (Polynimial*)new Polynimial;
+		p->coef = coef;
+		p->exp = exp;
+		r->next = p;		//利用尾插法，插入结点
+		r = p;
+		cin >> coef >> exp;
+	}
+	r->next = NULL;			//尾结点的next域置为NULL
+}
+
+/*删除一元多项式的某一项*/
+void DestroyPolynomial(PolynimialList& L)
+{
+	Polynimial* pre = L, * p = L->next;
+	while (p != NULL)
+	{
+		delete pre;
+		pre = p;
+		p = p->next;
+	}
+	delete pre;
+}
+
+/*合并多项式*/
+void CombinePolynomial(PolynimialList& P, PolynimialList& Q)
+{
+	Polynimial* p, * q, * pre, * temp;
+	p = P->next;
+	q = Q->next;
+	pre = P;
+	temp = NULL;
+	while (p != NULL && q != NULL)	//扫描p与q，当任意一个扫描完时，跳出循环
+	{
+		if (p->exp < q->exp)
+		{
+			pre = p;		  //pre与p后移
+			p = p->next;
+		}
+		else if (p->exp > q->exp)
+		{
+			temp = q->next;	  //保存q的后继结点的地址	
+			q->next = p;      //将q结点插入p结点之前，pre之后
+			pre->next = q;
+			pre = pre->next;  //pre后移
+			q = temp;         //q后移
+		}
+		else
+		{
+			p->coef = p->coef + q->coef;
+			if (p->coef == 0)
+			{
+				temp = p;		//删除结点p，p后移
+				p = p->next;
+				pre->next = p;
+				free(temp);
+			}
+			else
+			{
+				pre = p;		//pre与p后移
+				p = p->next;
+			}
+			temp = q;			//删除结点q，q后移
+			q = q->next;
+			free(temp);
+		}
+	}
+	if (q != NULL)				//如果p扫描完(p=null,pre指向最后一个结点)，q未扫描完,
+	{
+		pre->next = q;
+	}
+}
+
+/*输出一元多项式*/
+void PrintPolynimial(PolynimialList& L)
+{
+	Polynimial* p = L->next;
+	if (p == NULL)
+	{
+		cout << "该多项式为空项！" << endl;
+	}
+	cout << "多项式为 ：";
+	while (p != NULL)
+	{
+
+		if (p->exp != 0)	cout << p->coef << "*x^" << p->exp;
+		else                cout << p->coef;
+		if (p->next != NULL && p->next->coef > 0)
+		{
+			cout << " + ";
+		}
+		p = p->next;
+	}
+}
+
+int main()
+{
+	PolynimialList P = NULL, Q = NULL;		//创建多项式P(x)与Q(x)
+	cout << "1.构造多项式P(x)" << endl;
+	CreatePolynimial(P);
+	PrintPolynimial(P);
+	cout << "\n\n2.构造多项式Q(x)" << endl;
+	CreatePolynimial(Q);
+	PrintPolynimial(Q);
+	cout << "\n\n3.多项式求和" << endl;
+	CombinePolynomial(P, Q);				//合并多项式
+	PrintPolynimial(P);						//输出合并后的多项式
+	DestroyPolynomial(P);					//销毁链表
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
