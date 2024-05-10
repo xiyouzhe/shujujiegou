@@ -441,4 +441,83 @@ int main() {
 	}
 	return 0;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+稀疏矩阵
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#define OK 1
+#define Maxsize 10 //用户自定义三元组最大长度
+typedef struct { //定义三元组表
+	int i, j;
+	int v;
+}SPNode;
+typedef struct
+{ //定义三元组表
+	SPNode data[Maxsize];
+	int m, n, t;//矩阵行、列及三元表长度
+}SPMatrix;
+void InitSPNode(SPMatrix* a) { //输入三元组表
+	int i, j, k, val, maxrow, maxcol;
+	maxrow = 0;
+	maxcol = 0;
+	i = j = 0;
+	k = 0;
+	while (i != -1 && j != -1)//row=-1&&col=-1 结束输入
+	{
+		printf(" 输入(行 列 值):  ");
+		scanf(" %d %d %d", &i, &j, &val);
+		a->data[k].i = i;
+		a->data[k].j = j;
+		a->data[k].v = val;
+		if (maxrow < i) maxrow = i;
+		if (maxcol < j) maxcol = j;
+		k++;
+	}
+	a->m = maxrow;
+	a->n = maxcol;
+	a->t = k - 1;
+}
+void showMatrix(SPMatrix* a) { //输出稀疏矩阵
+	int p, q;
+	int t = 0;
+	for (p = 0; p <= a->m; p++) {
+		for (q = 0; q <= a->n; q++) {
+			if (a->data[t].i == p && a->data[t].j == q) {
+				printf(" %d  ", a->data[t].v);
+				t++;
+			}
+			else printf(" 0  ");
+		}
+		printf("\n");
+	}
+}
+void TransposeSMatrix(SPMatrix* a, SPMatrix* b) { //稀疏矩阵转置
+	int q, col, p;
+	b->m = a->n;
+	b->n = a->m;
+	b->t = a->t;
+	if (b->t) {
+		q = 0;
+		for (col = 0; col <= a->n; ++col) //按a的列序转置
+			for (p = 0; p < a->t; ++p) //扫描整个三元组表
+				if (a->data[p].j == col) {
+					b->data[q].i = a->data[p].j;
+					b->data[q].j = a->data[p].i;
+					b->data[q].v = a->data[p].v;
+					++q;
+				}
+	}
+}
+int main() {
+	SPMatrix a, b;
+	printf("\n 结束请输入(-1 -1 -1)\n");
+	InitSPNode(&a);
+	printf(" 输入矩阵为：\n");
+	showMatrix(&a);//转置前
+	TransposeSMatrix(&a, &b);
+	printf(" 输出矩阵为: \n");
+	showMatrix(&b);//转置后
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
