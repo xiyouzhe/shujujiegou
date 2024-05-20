@@ -521,3 +521,154 @@ int main() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+后序遍历二叉树非递归方法
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef char EType;
+
+struct BinaryTreeNode
+{
+	EType data;
+	struct BinaryTreeNode* LChild;
+	struct BinaryTreeNode* RChild;
+};
+typedef BinaryTreeNode BinaryTree;
+
+typedef struct SType
+{
+	BinaryTreeNode* ptr;
+	bool status;//进栈标志
+}SType;
+
+typedef struct Stack
+{
+	SType* element;
+	int top;
+	int MaxSize;
+}Stack;
+
+void CreatStack(Stack& S, int MaxStackSize);
+bool IsEmpty(Stack& S);
+bool IsFull(Stack& S);
+bool GetTop(Stack& S, SType& result);
+bool Pop(Stack& S, SType& result);
+bool Push(Stack& S, SType& x);
+void CreatBiTree(BinaryTreeNode** BT);
+void PostOrderNoRecursive(BinaryTreeNode* BT);
+
+int main()
+{
+	BinaryTreeNode* BT = NULL;
+	CreatBiTree(&BT);
+	printf("后序遍历二叉树非递归算法输出为：");
+	PostOrderNoRecursive(BT);
+	printf("\n");
+	return 0;
+}
+
+void CreatStack(Stack& S, int MaxStackSize)
+{
+	S.MaxSize = MaxStackSize;
+	S.element = new SType[S.MaxSize];
+	S.top = -1;
+}
+
+bool IsEmpty(Stack& S)
+{
+	if (S.top == -1)
+		return true;
+	return false;
+}
+
+bool IsFull(Stack& S)
+{
+	if (S.top >= S.MaxSize - 1)
+		return true;
+	return false;
+}
+
+bool GetTop(Stack& S, SType& result)
+{
+	if (IsEmpty(S))
+		return false;
+	result = S.element[S.top];
+	return true;
+}
+
+bool Pop(Stack& S, SType& result)
+{
+	if (IsEmpty(S))
+		return false;
+	result = S.element[S.top];
+	S.top--;
+	return true;
+}
+
+bool Push(Stack& S, SType& x)
+{
+	if (IsFull(S))
+		return false;
+	S.top++;
+	S.element[S.top] = x;
+	return true;
+}
+
+void CreatBiTree(BinaryTreeNode** BT)
+{
+	EType tem;
+
+	scanf("%c", &tem);
+	if (' ' == tem)
+	{
+		*BT = NULL;
+	}
+	else
+	{
+		*BT = new BinaryTreeNode;
+		(*BT)->data = tem;
+		CreatBiTree(&(*BT)->LChild);
+		CreatBiTree(&(*BT)->RChild);
+	}
+}
+
+void PostOrderNoRecursive(BinaryTreeNode* BT)
+{
+	Stack S;
+	SType temp;
+	BinaryTreeNode* p = BT;
+	int MaxStackSize = 50;
+	CreatStack(S, MaxStackSize);
+
+	while (p || !IsEmpty(S))
+	{
+		if (p)//找最左子树
+		{
+			temp.status = false;//设置该节点是第一次进栈
+			temp.ptr = p;
+			Push(S, temp);
+			p = p->LChild;
+		}
+		else
+		{
+			if (!IsEmpty(S))
+			{
+				Pop(S, temp);
+				p = temp.ptr;
+				if (temp.status)//若该节点是第二次退栈，就访问，并设置p=0继续退栈
+				{
+					printf("%c\t", p->data);
+					p = NULL;
+				}
+				else
+				{
+					temp.status = true;//设置该节点是第二次进栈
+					Push(S, temp);
+					p = p->RChild;//遍历该节点的右子树
+				}
+			}
+		}
+	}
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
