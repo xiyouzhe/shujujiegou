@@ -146,3 +146,80 @@ int main()
 	}
 	return 0;
 }
+
+
+(2)
+#include <stdio.h>
+#include <stdlib.h>
+
+void Print(int* arr, int length)
+{
+	for (int i = 1; i <= length; i++)
+		printf("%d ", arr[i]);
+}
+
+void QuickSort(int* arr, int low, int high)
+{
+	int i = 1, j = 1, k = high, temp;
+	while (k != j)
+	{
+		while (arr[k] == 3) k--;    //k指的是蓝色，故直接后移
+		if (arr[k] == 1)        //k指的是红色
+			if (i >= j)     //i左侧全部是红色，直接将k所指红色与i交换即可
+			{
+				temp = arr[k];
+				arr[k] = arr[i];
+				arr[i] = temp;
+				i++;
+			}
+			else            //i<j时表示i所指为白色，此时应当将未处理的j所指与i交换，再将k所指红色与未处理交换
+			{
+				temp = arr[j];
+				arr[j] = arr[i];
+				arr[i] = temp;
+				j++;
+				temp = arr[k];
+				arr[k] = arr[i];
+				arr[i] = temp;
+				i++;
+			}
+		if (arr[k] == 2)     //k指的是白色
+			if (i <= j)   //j左侧为白色，直接将k所指交换即可
+			{
+				temp = arr[k];
+				arr[k] = arr[j];
+				arr[j] = temp;
+				j++;
+			}
+			else         //j指的是红色，i的左侧是红色，故应当将k与i交换
+			{
+				temp = arr[k];
+				arr[k] = arr[i];
+				arr[i] = temp;
+				j = i + 1;
+			}
+	}
+	if (arr[k] == 2) j++; //此时k=j且j所指为白色
+	else if (arr[k] == 1)  //j=k且j所指为红色，故应当和j所指调换位置
+	{
+		temp = arr[j];
+		arr[j] = arr[i];
+		arr[i] = temp;
+		i++;
+		j++;
+	}
+}
+
+void main()
+{
+	int* arr;
+	int  length;
+	printf("请输入n的值");
+	scanf_s("%d", &length);
+	arr = (int*)malloc(sizeof(int) * (length + 1));
+	printf("请依次输入石头颜色类型（1表示红色，2表示白色，3表示蓝色）");
+	for (int i = 1; i <= length; i++)
+		scanf_s("%d", &arr[i]);
+	QuickSort(arr, 1, length);
+	Print(arr, length);
+}
