@@ -223,3 +223,41 @@ void main()
 	QuickSort(arr, 1, length);
 	Print(arr, length);
 }
+
+（3）
+//基于快排思想的查找
+#include <iostream>
+using namespace std;
+void Find(int r[],int target,int len){
+	int i=0,j=len;
+	while(i<j){
+		while(r[i-1]>target&&r[j-1]<target){//如果查找区间左大右小（和target相比），直接向中间收缩 
+			i++;
+			j--;
+		}
+		while(r[i-1]<target&&i<j) i++;//坐标定位到第一个不小于target的元素 
+		if(r[i-1]==target){
+			cout<<i<<" "<<target<<endl;
+			return;
+		}
+		while(r[j-1]<target&&i<j) j--;//右边定位到第一个不大于target的元素 
+		if(r[j-1]==target){
+			cout<<j<<" "<<target<<endl;
+			return;
+		}
+		i++;
+		j--;
+	}
+	cout<<"not find"<<endl;
+}
+int main(){
+	int n;
+	while(cin>>n&&n!=0){
+		int r[n];
+		for(int i=1;i<=n;i++) cin>>r[i-1];//输入 
+		int target;
+		cin>>target;
+		Find(r,target,n);//查找 
+	}
+	return 0;
+} 
